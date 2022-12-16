@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:title="@string/attendance">
+        <menu>
+            <item
+                android:id="@+id/nav_presence"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="@string/presence" />
+            <item
+                android:id="@+id/nav_list_presence"
+                android:icon="@drawable/ic_baseline_checklist_24"
+                android:title="@string/list_presence" />
+        </menu>
+    </item>
+    <item
+        android:title="@string/cuti">
+        <menu>
+            <item
+            android:id="@+id/nav_cuti"
+            android:icon="@drawable/ic_baseline_attach_file_24"
+            android:title="@string/cuti" />
+        </menu>
+    </item>
+</menu>

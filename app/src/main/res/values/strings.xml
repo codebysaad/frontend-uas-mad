@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">UAS MAD</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="error_email">Harap masukkan email dengan benar</string>
+    <string name="error_password">Harap masukkan password dengan benar</string>
+    <string name="dialog_exit_app">Apakah anda yakin keluar dari aplikasi?</string>
+    <string name="dialog_logout">Apakah anda yakin ingin logout akun?</string>
+    <string name="dialog_delete">Apakah anda yakin ingin menghapus data ini?</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="failed_login">Proses Login Gagal</string>
+    <string name="logout">Logout</string>
+    <string name="access_location_not_allowed">Sorry Location Access Not Allowed</string>
+    <string name="error_no_image_selected">Please insert image first!</string>
+    <string name="choose_picture">Choose a Picture</string>
+    <string name="presence">Presence</string>
+    <string name="list_presence">List Presence</string>
+    <string name="cuti">Cuti</string>
+    <string name="attendance">Attendance</string>
+</resources>

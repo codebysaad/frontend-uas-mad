@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_presence">
+
+    <fragment
+        android:id="@+id/nav_presence"
+        android:name="com.saadfauzi.uasmad.ui.presence.HomeFragment"
+        android:label="@string/presence"
+        tools:layout="@layout/fragment_presence" />
+
+    <fragment
+        android:id="@+id/nav_list_presence"
+        android:name="com.saadfauzi.uasmad.ui.listpresence.ListPresenceFragment"
+        android:label="@string/list_presence"
+        tools:layout="@layout/fragment_list_presence" />
+
+    <fragment
+        android:id="@+id/nav_cuti"
+        android:name="com.saadfauzi.uasmad.ui.cuti.CutiFragment"
+        android:label="@string/cuti"
+        tools:layout="@layout/fragment_slideshow" />
+</navigation>
