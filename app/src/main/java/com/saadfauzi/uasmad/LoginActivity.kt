@@ -135,7 +135,7 @@ class LoginActivity : AppCompatActivity() {
         viewModel.postLogin(email, password)
         viewModel.loginResult.observe(this) { result ->
             if (result != null) {
-                if (result.data == null) {
+                if (result.accessToken == null) {
                     result.message?.let { Log.d("LoginActivity", it) }
                     Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                 } else {

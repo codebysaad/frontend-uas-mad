@@ -1,35 +1,39 @@
-package com.saadfauzi.uasmad.ui.listpresence
+package com.saadfauzi.uasmad.ui.jeniscuti
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.saadfauzi.uasmad.adapters.ListPresenceAdapter
 import com.saadfauzi.uasmad.R
-import com.saadfauzi.uasmad.databinding.FragmentListPresenceBinding
+import com.saadfauzi.uasmad.adapters.ListJenisCutiAdapter
+import com.saadfauzi.uasmad.databinding.FragmentJenisCutiBinding
 import com.saadfauzi.uasmad.helper.CustomSettingPreferences
-import com.saadfauzi.uasmad.models.ListAttendance
+import com.saadfauzi.uasmad.models.JenisCuti
 import com.saadfauzi.uasmad.viewmodels.ViewModelFactory
 
 private val Activity.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-class ListPresenceFragment : Fragment() {
+class JenisCutiFragment : Fragment() {
 
     private val binding by lazy {
-        FragmentListPresenceBinding.inflate(layoutInflater)
+        FragmentJenisCutiBinding.inflate(layoutInflater)
     }
-    private lateinit var viewModel: ListPresenceViewModel
+    private lateinit var viewModel: JenisCutiViewModel
+//    private var token: String = "3|C8NASZ7I7qn35UWEdn3TPJbCZjPYODZbkStIydUI"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +48,7 @@ class ListPresenceFragment : Fragment() {
 
         val pref = CustomSettingPreferences.getInstance(requireActivity().dataStore)
         viewModel = ViewModelProvider(this, ViewModelFactory(requireContext(), pref))[
-                ListPresenceViewModel::class.java
+                JenisCutiViewModel::class.java
         ]
 
         viewModel.isLoading.observe(viewLifecycleOwner) {
@@ -58,11 +62,12 @@ class ListPresenceFragment : Fragment() {
         }
 
         viewModel.getAccessToken().observe(viewLifecycleOwner) {
-            viewModel.getAllAttend(it)
-            Log.d("Token", it)
+//            token = it
+            viewModel.getAllJenisCuti(it)
+            Log.d("TokenJenisCuti", it)
         }
 
-        viewModel.listAttendance.observe(viewLifecycleOwner) {
+        viewModel.listJenisCuti.observe(viewLifecycleOwner) {
             if (it != null) {
                 setupRecyclerView(it)
             }
@@ -73,21 +78,26 @@ class ListPresenceFragment : Fragment() {
                 showToast(it.message)
             }
         }
+
+        binding.fabJenisCuti.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_jns_cuti_to_nav_add_jns_cuti)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun setupRecyclerView(listData: ArrayList<ListAttendance>) {
-        binding.rvListPresence.layoutManager = LinearLayoutManager(requireActivity())
-        val adapter = ListPresenceAdapter(listData, object : ListPresenceAdapter.OnAdapterListener{
-            override fun onDelete(data: ListAttendance) {
+    private fun setupRecyclerView(listData: ArrayList<JenisCuti>) {
+        binding.rvListJenisCuti.layoutManager = LinearLayoutManager(requireActivity())
+        val adapter = ListJenisCutiAdapter(listData, object : ListJenisCutiAdapter.OnAdapterListener{
+            override fun onDelete(data: JenisCuti) {
                 deleteDialog(data)
             }
 
-            override fun onUpdate(data: ListAttendance) {
-                TODO("Not yet implemented")
+            override fun onUpdate(data: JenisCuti) {
+                val action = JenisCutiFragmentDirections.actionNavJnsCutiToNavUpdateJnsCuti(data)
+                findNavController().navigate(action)
             }
         })
-        binding.rvListPresence.adapter = adapter
+        binding.rvListJenisCuti.adapter = adapter
         adapter.notifyDataSetChanged()
     }
 
@@ -97,19 +107,19 @@ class ListPresenceFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.apply {
-            pbListPresence.visibility = if (isLoading) View.VISIBLE else View.GONE
+            pbListJenisCuti.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 
-    private fun deleteDialog(data: ListAttendance) {
+    private fun deleteDialog(data: JenisCuti) {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(resources.getString(R.string.app_name))
         builder.setMessage(resources.getString(R.string.dialog_delete))
         builder.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
             viewModel.getAccessToken().observe(viewLifecycleOwner) {
-                viewModel.deleteAttend(it, data)
-                viewModel.getAllAttend(it)
-                Log.d("Token", it)
+                viewModel.deleteJenisCuti(it, data)
+                viewModel.getAllJenisCuti(it)
+                Log.d("TokenJenisCuti", it)
             }
         }
         builder.setNegativeButton(resources.getString(R.string.no)) { dialogInterface, _ -> dialogInterface.cancel() }

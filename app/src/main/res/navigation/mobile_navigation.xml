@@ -21,5 +21,45 @@
         android:id="@+id/nav_cuti"
         android:name="com.saadfauzi.uasmad.ui.cuti.CutiFragment"
         android:label="@string/cuti"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_cuti" />
+
+    <fragment
+        android:id="@+id/nav_jns_cuti"
+        android:name="com.saadfauzi.uasmad.ui.jeniscuti.JenisCutiFragment"
+        android:label="@string/jenis_cuti"
+        tools:layout="@layout/fragment_jenis_cuti" >
+        <action
+            android:id="@+id/action_nav_jns_cuti_to_nav_add_jns_cuti"
+            app:destination="@id/nav_add_jns_cuti" />
+        <action
+            android:id="@+id/action_nav_jns_cuti_to_nav_update_jns_cuti"
+            app:destination="@id/nav_update_jns_cuti"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_jns_cuti"
+        android:name="com.saadfauzi.uasmad.ui.jeniscuti.AddJenisCutiFragment"
+        android:label="@string/jenis_cuti"
+        tools:layout="@layout/fragment_add_jenis_cuti" >
+        <action
+            android:id="@+id/action_nav_add_jns_cuti_to_nav_jns_cuti"
+            app:destination="@id/nav_jns_cuti" />
+        <action
+            android:id="@+id/action_nav_add_jns_cuti_to_nav_jns_cuti2"
+            app:popUpTo="@id/nav_jns_cuti" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_update_jns_cuti"
+        android:name="com.saadfauzi.uasmad.ui.jeniscuti.UpdateJenisCutiFragment"
+        android:label="@string/jenis_cuti"
+        tools:layout="@layout/fragment_update_jenis_cuti" >
+        <action
+            android:id="@+id/action_nav_update_jns_cuti_to_nav_jns_cuti"
+            app:destination="@id/nav_jns_cuti" />
+        <argument
+            android:name="JenisCuti"
+            app:argType="com.saadfauzi.uasmad.models.JenisCuti" />
+    </fragment>
 </navigation>

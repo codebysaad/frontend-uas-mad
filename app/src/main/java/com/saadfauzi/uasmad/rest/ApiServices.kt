@@ -9,21 +9,6 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiServices {
-//    @GET(Helpers.ADD_AND_GET_STORIES)
-//    suspend fun getAllStories(
-//        @Header("Authorization") token: String,
-//        @Query("page") page: Int,
-//        @Query("size") size: Int,
-//    ): GetAllStoriesResponse
-
-//    @FormUrlEncoded
-//    @POST(Constanta.ENDPOINT_Re)
-//    fun registerNewUser(
-//        @Field("name") name: String,
-//        @Field("email") email: String,
-//        @Field("password") password: String
-//    ): Call<GeneralResponse>
-
     @FormUrlEncoded
     @POST(Helpers.ENDPOINT_LOGIN)
     fun login(
@@ -57,9 +42,36 @@ interface ApiServices {
         @Path("attendance") id: Int?,
     ): Call<GeneralResponse>
 
-//    @GET(Helpers.ADD_AND_GET_STORIES)
-//    fun getStoriesInMap(
-//        @Header("Authorization") token: String,
-//        @Query("location") location: String,
-//    ): Call<GetAllStoriesResponse>
+    @GET(Helpers.ENDPOINT_JENIS_CUTI)
+    fun getAllJenisCuti(
+        @Header("Authorization") token: String,
+    ): Call<JenisCutiResponse>
+
+    @Multipart
+    @POST(Helpers.ENDPOINT_JENIS_CUTI)
+    fun addJenisCuti(
+        @Header("Authorization") token: String,
+        @Part("jenis_cuti") jenisCuti: RequestBody,
+        @Part("deskripsi") description: RequestBody,
+    ): Call<JenisCutiResponse>
+
+    @Multipart
+    @POST("${Helpers.ENDPOINT_JENIS_CUTI}/{id}")
+    fun updateJenisCuti(
+        @Header("Authorization") token: String,
+        @Part("_method") methode: RequestBody,
+        @Part("id") idBody: RequestBody,
+        @Part("jenis_cuti") jenisCuti: RequestBody,
+        @Part("deskripsi") description: RequestBody,
+        @Path("id") idParams: Int,
+    ): Call<JenisCutiResponse>
+
+    @Multipart
+    @POST("${Helpers.ENDPOINT_JENIS_CUTI}/{id}")
+    fun deleteJenisCuti(
+        @Header("Authorization") token: String,
+        @Part("_method") methode: RequestBody,
+        @Part("id") id: RequestBody,
+        @Path("id") idParams: Int,
+    ): Call<JenisCutiResponse>
 }

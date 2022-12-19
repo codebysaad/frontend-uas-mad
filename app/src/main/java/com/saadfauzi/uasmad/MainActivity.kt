@@ -47,10 +47,10 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+//        binding.appBarMain.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
         initViewModels()
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_presence, R.id.nav_list_presence, R.id.nav_cuti
+                R.id.nav_presence, R.id.nav_list_presence, R.id.nav_cuti, R.id.nav_jns_cuti
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

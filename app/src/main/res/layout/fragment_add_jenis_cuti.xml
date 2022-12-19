@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.jeniscuti.AddJenisCutiFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="?attr/textInputFilledStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Jenis Cuti"
+        app:boxBackgroundColor="@color/white"
+        app:startIconDrawable="@drawable/ic_baseline_attach_file_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_jns_cuti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="?attr/textInputFilledStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Deskripsi"
+        app:boxBackgroundColor="@color/white"
+        app:startIconDrawable="@drawable/ic_baseline_description_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_desc_jns_cuti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:lines="7" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/teal_700"
+        android:padding="8dp"
+        android:text="Submit"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <ProgressBar
+        android:id="@+id/pb_add_jenis_cuti"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.saadfauzi.uasmad.databinding.FragmentSlideshowBinding
+import com.saadfauzi.uasmad.databinding.FragmentCutiBinding
 
 class CutiFragment : Fragment() {
 
-    private var _binding: FragmentSlideshowBinding? = null
+    private var _binding: FragmentCutiBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,7 +25,7 @@ class CutiFragment : Fragment() {
         val cutiViewModel =
             ViewModelProvider(this).get(CutiViewModel::class.java)
 
-        _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
+        _binding = FragmentCutiBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textSlideshow
