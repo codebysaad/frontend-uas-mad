@@ -58,8 +58,8 @@ class AddJenisCutiFragment : Fragment() {
         }
 
         viewModel.resultAddJenisCuti.observe(viewLifecycleOwner) { data->
-            if (data.success){
-                findNavController().navigate(R.id.action_nav_add_jns_cuti_to_nav_jns_cuti2)
+            if (data != null){
+                findNavController().popBackStack()
             }
         }
         binding.btnSubmit.setOnClickListener {

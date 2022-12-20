@@ -62,7 +62,6 @@ class JenisCutiFragment : Fragment() {
         }
 
         viewModel.getAccessToken().observe(viewLifecycleOwner) {
-//            token = it
             viewModel.getAllJenisCuti(it)
             Log.d("TokenJenisCuti", it)
         }

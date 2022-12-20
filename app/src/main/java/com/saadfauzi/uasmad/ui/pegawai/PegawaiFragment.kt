@@ -1,9 +1,11 @@
-package com.saadfauzi.uasmad.ui.cuti
+package com.saadfauzi.uasmad.ui.pegawai
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,26 +14,24 @@ import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saadfauzi.uasmad.R
-import com.saadfauzi.uasmad.adapters.ListCutiAdapter
-import com.saadfauzi.uasmad.databinding.FragmentCutiBinding
+import com.saadfauzi.uasmad.adapters.ListPegawaiAdapter
+import com.saadfauzi.uasmad.databinding.FragmentPegawaiBinding
 import com.saadfauzi.uasmad.helper.CustomSettingPreferences
-import com.saadfauzi.uasmad.models.Cuti
+import com.saadfauzi.uasmad.models.DataPegawai
 import com.saadfauzi.uasmad.ui.jeniscuti.JenisCutiFragmentDirections
 import com.saadfauzi.uasmad.viewmodels.ViewModelFactory
 
 private val Activity.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-class CutiFragment : Fragment() {
+class PegawaiFragment : Fragment() {
 
     private val binding by lazy {
-        FragmentCutiBinding.inflate(layoutInflater)
+        FragmentPegawaiBinding.inflate(layoutInflater)
     }
-    private lateinit var viewModel: CutiViewModel
+    private lateinit var viewModel: PegawaiViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +46,7 @@ class CutiFragment : Fragment() {
 
         val pref = CustomSettingPreferences.getInstance(requireActivity().dataStore)
         viewModel = ViewModelProvider(this, ViewModelFactory(requireContext(), pref))[
-                CutiViewModel::class.java
+                PegawaiViewModel::class.java
         ]
 
         viewModel.isLoading.observe(viewLifecycleOwner) {
@@ -60,11 +60,11 @@ class CutiFragment : Fragment() {
         }
 
         viewModel.getAccessToken().observe(viewLifecycleOwner) {
-            viewModel.getAllCuti(it)
+            viewModel.getAllPegawai(it)
             Log.d("TokenJenisCuti", it)
         }
 
-        viewModel.listCuti.observe(viewLifecycleOwner) {
+        viewModel.listPegawai.observe(viewLifecycleOwner) {
             if (it != null) {
                 setupRecyclerView(it)
             }
@@ -76,25 +76,25 @@ class CutiFragment : Fragment() {
             }
         }
 
-        binding.fabCuti.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_cuti_to_nav_add_cuti)
+        binding.fabPegawai.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_pegawai_to_nav_add_pegawai)
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun setupRecyclerView(listData: ArrayList<Cuti>) {
-        binding.rvListCuti.layoutManager = LinearLayoutManager(requireActivity())
-        val adapter = ListCutiAdapter(listData, object : ListCutiAdapter.OnAdapterListener{
-            override fun onDelete(data: Cuti) {
+    private fun setupRecyclerView(listData: ArrayList<DataPegawai>) {
+        binding.rvListPegawai.layoutManager = LinearLayoutManager(requireActivity())
+        val adapter = ListPegawaiAdapter(listData, object : ListPegawaiAdapter.OnAdapterListener{
+            override fun onDelete(data: DataPegawai) {
                 deleteDialog(data)
             }
 
-            override fun onUpdate(data: Cuti) {
-                val action = CutiFragmentDirections.actionNavCutiToNavUpdateCuti(data)
+            override fun onUpdate(data: DataPegawai) {
+                val action = PegawaiFragmentDirections.actionNavPegawaiToNavUpdatePegawai(data)
                 findNavController().navigate(action)
             }
         })
-        binding.rvListCuti.adapter = adapter
+        binding.rvListPegawai.adapter = adapter
         adapter.notifyDataSetChanged()
     }
 
@@ -104,18 +104,18 @@ class CutiFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.apply {
-            pbListCuti.visibility = if (isLoading) View.VISIBLE else View.GONE
+            pbListPegawai.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 
-    private fun deleteDialog(data: Cuti) {
+    private fun deleteDialog(data: DataPegawai) {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(resources.getString(R.string.app_name))
         builder.setMessage(resources.getString(R.string.dialog_delete))
         builder.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
             viewModel.getAccessToken().observe(viewLifecycleOwner) {
-                viewModel.deleteCuti(it, data)
-                viewModel.getAllCuti(it)
+                viewModel.deleteJenisCuti(it, data)
+                viewModel.getAllPegawai(it)
                 Log.d("TokenJenisCuti", it)
             }
         }

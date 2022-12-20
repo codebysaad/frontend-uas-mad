@@ -21,7 +21,37 @@
         android:id="@+id/nav_cuti"
         android:name="com.saadfauzi.uasmad.ui.cuti.CutiFragment"
         android:label="@string/cuti"
-        tools:layout="@layout/fragment_cuti" />
+        tools:layout="@layout/fragment_cuti" >
+        <action
+            android:id="@+id/action_nav_cuti_to_nav_update_cuti"
+            app:destination="@id/nav_update_cuti" />
+        <action
+            android:id="@+id/action_nav_cuti_to_nav_add_cuti"
+            app:destination="@id/nav_add_cuti" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_cuti"
+        android:name="com.saadfauzi.uasmad.ui.cuti.AddCutiFragment"
+        android:label="@string/cuti"
+        tools:layout="@layout/fragment_add_cuti" >
+        <action
+            android:id="@+id/action_nav_add_cuti_to_nav_cuti"
+            app:destination="@id/nav_cuti" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_update_cuti"
+        android:name="com.saadfauzi.uasmad.ui.cuti.UpdateCutiFragment"
+        android:label="@string/cuti"
+        tools:layout="@layout/fragment_update_cuti" >
+        <action
+            android:id="@+id/action_nav_update_cuti_to_nav_cuti"
+            app:destination="@id/nav_cuti" />
+        <argument
+            android:name="Cuti"
+            app:argType="com.saadfauzi.uasmad.models.Cuti" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_jns_cuti"
@@ -61,5 +91,41 @@
         <argument
             android:name="JenisCuti"
             app:argType="com.saadfauzi.uasmad.models.JenisCuti" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_pegawai"
+        android:name="com.saadfauzi.uasmad.ui.pegawai.PegawaiFragment"
+        android:label="@string/pegawai"
+        tools:layout="@layout/fragment_pegawai" >
+        <action
+            android:id="@+id/action_nav_pegawai_to_nav_update_pegawai"
+            app:destination="@id/nav_update_pegawai" />
+        <action
+            android:id="@+id/action_nav_pegawai_to_nav_add_pegawai"
+            app:destination="@id/nav_add_pegawai" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_pegawai"
+        android:name="com.saadfauzi.uasmad.ui.pegawai.AddPegawaiFragment"
+        android:label="@string/pegawai"
+        tools:layout="@layout/fragment_add_pegawai" >
+        <action
+            android:id="@+id/action_nav_add_pegawai_to_nav_pegawai"
+            app:destination="@id/nav_pegawai" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_update_pegawai"
+        android:name="com.saadfauzi.uasmad.ui.pegawai.UpdatePegawaiFragment"
+        android:label="@string/pegawai"
+        tools:layout="@layout/fragment_update_pegawai" >
+        <action
+            android:id="@+id/action_nav_update_pegawai_to_nav_pegawai"
+            app:destination="@id/nav_pegawai" />
+        <argument
+            android:name="Pegawai"
+            app:argType="com.saadfauzi.uasmad.models.DataPegawai" />
     </fragment>
 </navigation>

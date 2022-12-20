@@ -23,7 +23,7 @@ data class JenisCuti(
 	val updatedAt: String? = null,
 
 	@field:SerializedName("jenis_cuti")
-	val jenisCuti: String? = null,
+	val jenisCuti: String,
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,

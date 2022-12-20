@@ -1,4 +1,4 @@
-package com.saadfauzi.uasmad.ui.jeniscuti
+package com.saadfauzi.uasmad.ui.pegawai
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -15,7 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class JenisCutiViewModel(private val pref: CustomSettingPreferences) : ViewModel() {
+class PegawaiViewModel (private val pref: CustomSettingPreferences) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -23,45 +23,45 @@ class JenisCutiViewModel(private val pref: CustomSettingPreferences) : ViewModel
     private val _isMessage = MutableLiveData<Event<String?>>()
     val isMessage: LiveData<Event<String?>> = _isMessage
 
-    private val _listJenisCuti = MutableLiveData<ArrayList<JenisCuti>?>()
-    val listJenisCuti: LiveData<ArrayList<JenisCuti>?> = _listJenisCuti
+    private val _listJPegawai = MutableLiveData<ArrayList<DataPegawai>?>()
+    val listPegawai: LiveData<ArrayList<DataPegawai>?> = _listJPegawai
 
-    private val _resultAddJenisCuti = MutableLiveData<JenisCuti>()
-    val resultAddJenisCuti: LiveData<JenisCuti> = _resultAddJenisCuti
+    private val _resultAddPegawai = MutableLiveData<DataPegawai>()
+    val resultAddPegawai: LiveData<DataPegawai> = _resultAddPegawai
 
-    private val _resultUpdateJenisCuti = MutableLiveData<JenisCuti>()
-    val resultUpdateJenisCuti: LiveData<JenisCuti> = _resultUpdateJenisCuti
+    private val _resultUpdatePegawai = MutableLiveData<UpdateDeletePegawai>()
+    val resultUpdatePegawai: LiveData<UpdateDeletePegawai> = _resultUpdatePegawai
 
-    private val _deleteResult = MutableLiveData<JenisCutiResponse?>()
-    val deleteResult: LiveData<JenisCutiResponse?> = _deleteResult
+    private val _deleteResult = MutableLiveData<UpdateDeletePegawai?>()
+    val deleteResult: LiveData<UpdateDeletePegawai?> = _deleteResult
 
     fun getAccessToken(): LiveData<String> {
         return pref.getAccessToken().asLiveData()
     }
 
-    fun getAllJenisCuti(token: String){
+    fun getAllPegawai(token: String){
         _isLoading.value = true
         Log.i("TokenJenisCuti", token)
-        val client = ApiConfig.getApiService().getAllJenisCuti(
+        val client = ApiConfig.getApiService().getAllPegawai(
             "Bearer $token",
         )
-        client.enqueue(object : Callback<JenisCutiResponse> {
+        client.enqueue(object : Callback<PegawaiResponse> {
             override fun onResponse(
-                call: Call<JenisCutiResponse>,
-                response: Response<JenisCutiResponse>
+                call: Call<PegawaiResponse>,
+                response: Response<PegawaiResponse>
             ) {
                 if (response.isSuccessful) {
                     _isLoading.value = false
                     val responseBody = response.body()
                     if (responseBody != null && responseBody.success) {
-                        _listJenisCuti.value = responseBody.data
+                        _listJPegawai.value = responseBody.data
                     }
                 } else {
                     _isLoading.value = false
                 }
             }
 
-            override fun onFailure(call: Call<JenisCutiResponse>, t: Throwable) {
+            override fun onFailure(call: Call<PegawaiResponse>, t: Throwable) {
                 _isLoading.value = false
                 _isMessage.value = Event(t.message)
             }
@@ -69,29 +69,31 @@ class JenisCutiViewModel(private val pref: CustomSettingPreferences) : ViewModel
         })
     }
 
-    fun addJenisCuti(token: String, jnsCuti: RequestBody, desc: RequestBody){
+    fun addPegawai(token: String, namaLengkap: RequestBody, alamat: RequestBody, tmptLahir: RequestBody, tglLahir: RequestBody){
         _isLoading.value = true
         Log.i("TokenJenisCuti", token)
-        val client = ApiConfig.getApiService().addJenisCuti(
+        val client = ApiConfig.getApiService().addPegawai(
             "Bearer $token",
-            jnsCuti,
-            desc
+            namaLengkap,
+            alamat,
+            tmptLahir,
+            tglLahir
         )
-        client.enqueue(object : Callback<JenisCuti> {
+        client.enqueue(object : Callback<DataPegawai> {
             override fun onResponse(
-                call: Call<JenisCuti>,
-                response: Response<JenisCuti>
+                call: Call<DataPegawai>,
+                response: Response<DataPegawai>
             ) {
                 if (response.isSuccessful) {
                     _isLoading.value = false
                     val responseBody = response.body()
-                    _resultAddJenisCuti.value = responseBody!!
+                    _resultAddPegawai.value = responseBody!!
                 } else {
                     _isLoading.value = false
                 }
             }
 
-            override fun onFailure(call: Call<JenisCuti>, t: Throwable) {
+            override fun onFailure(call: Call<DataPegawai>, t: Throwable) {
                 _isLoading.value = false
                 _isMessage.value = Event(t.message)
             }
@@ -99,33 +101,35 @@ class JenisCutiViewModel(private val pref: CustomSettingPreferences) : ViewModel
         })
     }
 
-    fun updateJenisCuti(token: String,idBody: RequestBody, jnsCuti: RequestBody, desc: RequestBody, idParams: Int){
+    fun updatePegawai(token: String, idBody: RequestBody, namaLengkap: RequestBody, alamat: RequestBody, tmptLahir: RequestBody, tglLahir: RequestBody, idParams: Int){
         _isLoading.value = true
         val methode = "PUT".toRequestBody()
         Log.i("TokenJenisCuti", token)
-        val client = ApiConfig.getApiService().updateJenisCuti(
+        val client = ApiConfig.getApiService().updatePegawai(
             "Bearer $token",
             methode,
             idBody,
-            jnsCuti,
-            desc,
+            namaLengkap,
+            alamat,
+            tmptLahir,
+            tglLahir,
             idParams
         )
-        client.enqueue(object : Callback<JenisCuti> {
+        client.enqueue(object : Callback<UpdateDeletePegawai> {
             override fun onResponse(
-                call: Call<JenisCuti>,
-                response: Response<JenisCuti>
+                call: Call<UpdateDeletePegawai>,
+                response: Response<UpdateDeletePegawai>
             ) {
                 if (response.isSuccessful) {
                     _isLoading.value = false
                     val responseBody = response.body()
-                    _resultUpdateJenisCuti.value = responseBody!!
+                    _resultUpdatePegawai.value = responseBody!!
                 } else {
                     _isLoading.value = false
                 }
             }
 
-            override fun onFailure(call: Call<JenisCuti>, t: Throwable) {
+            override fun onFailure(call: Call<UpdateDeletePegawai>, t: Throwable) {
                 _isLoading.value = false
                 _isMessage.value = Event(t.message)
             }
@@ -133,21 +137,21 @@ class JenisCutiViewModel(private val pref: CustomSettingPreferences) : ViewModel
         })
     }
 
-    fun deleteJenisCuti(token: String, data: JenisCuti){
+    fun deleteJenisCuti(token: String, data: DataPegawai){
         _isLoading.value = true
         val idBody = data.id.toString().toRequestBody()
         val idParams = data.id
         val methode = "DELETE".toRequestBody()
-        val client = ApiConfig.getApiService().deleteJenisCuti(
+        val client = ApiConfig.getApiService().deletePegawai(
             "Bearer $token",
             methode,
             idBody,
             idParams
         )
-        client.enqueue(object : Callback<JenisCutiResponse> {
+        client.enqueue(object : Callback<UpdateDeletePegawai> {
             override fun onResponse(
-                call: Call<JenisCutiResponse>,
-                response: Response<JenisCutiResponse>
+                call: Call<UpdateDeletePegawai>,
+                response: Response<UpdateDeletePegawai>
             ) {
                 if (response.isSuccessful) {
                     _isLoading.value = false
@@ -160,7 +164,7 @@ class JenisCutiViewModel(private val pref: CustomSettingPreferences) : ViewModel
                 }
             }
 
-            override fun onFailure(call: Call<JenisCutiResponse>, t: Throwable) {
+            override fun onFailure(call: Call<UpdateDeletePegawai>, t: Throwable) {
                 _isLoading.value = false
                 _isMessage.value = Event(t.message)
             }
