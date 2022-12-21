@@ -21,6 +21,17 @@ interface ApiServices {
     ): Call<LogoutResponse>
 
     @Multipart
+    @POST(Helpers.ENDPOINT_Register)
+    fun register(
+        @Part("name") name: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("phone_number") phoneNumber: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part("role") role: RequestBody,
+        @Part photo: MultipartBody.Part,
+    ): Call<RegisterResponse>
+
+    @Multipart
     @POST(Helpers.ENDPOINT_ATTENDANCE)
     fun addAttend(
         @Header("Authorization") token: String,

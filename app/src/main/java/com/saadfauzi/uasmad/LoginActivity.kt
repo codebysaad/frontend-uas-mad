@@ -5,7 +5,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableString
+import android.text.Spanned
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -16,7 +20,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.saadfauzi.uasmad.databinding.ActivityLoginBinding
 import com.saadfauzi.uasmad.helper.CustomSettingPreferences
-import com.saadfauzi.uasmad.viewmodels.LoginViewModel
+import com.saadfauzi.uasmad.viewmodels.RegisterLoginViewModel
 import com.saadfauzi.uasmad.viewmodels.ViewModelFactory
 import java.util.*
 
@@ -27,11 +31,13 @@ class LoginActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
-    private lateinit var viewModel: LoginViewModel
+    private lateinit var viewModel: RegisterLoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        moveToRegister()
 
         initViewModels()
         setButtonLoginEnabled()
@@ -51,17 +57,11 @@ class LoginActivity : AppCompatActivity() {
         val pref = CustomSettingPreferences.getInstance(dataStore)
 
         viewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[
-                LoginViewModel::class.java
+                RegisterLoginViewModel::class.java
         ]
 
         viewModel.isLoading.observe(this) {
             showLoading(it)
-        }
-
-        viewModel.isMessage.observe(this) {
-            it.getContentIfNotHandled()?.let { message ->
-                showToast(message)
-            }
         }
 
         viewModel.getStateLogin().observe(this) {
@@ -69,6 +69,23 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                 finish()
             }
+        }
+    }
+
+    private fun moveToRegister() {
+        val spannableString = SpannableString(resources.getString(R.string.don_t_have_an_account))
+        val register: ClickableSpan = object : ClickableSpan() {
+            override fun onClick(p0: View) {
+                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+
+        spannableString.setSpan(register, 18, 29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.tvNotHavAccount.apply {
+            text = spannableString
+            movementMethod = LinkMovementMethod.getInstance()
         }
     }
 
@@ -137,7 +154,7 @@ class LoginActivity : AppCompatActivity() {
             if (result != null) {
                 if (result.accessToken == null) {
                     result.message?.let { Log.d("LoginActivity", it) }
-                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
+                    showToast(result.message.toString())
                 } else {
                     val token = result.accessToken.toString()
                     viewModel.saveAccessToken(true, token)
@@ -146,8 +163,7 @@ class LoginActivity : AppCompatActivity() {
                     finish()
                 }
             } else {
-                Toast.makeText(this, resources.getString(R.string.failed_login), Toast.LENGTH_SHORT)
-                    .show()
+                showToast(resources.getString(R.string.failed_login))
             }
         }
     }

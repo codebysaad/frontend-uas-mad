@@ -307,7 +307,7 @@ class HomeFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     companion object {
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
         private const val REQUEST_CODE_PERMISSIONS = 10
     }
 }
