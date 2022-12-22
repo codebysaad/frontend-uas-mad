@@ -13,17 +13,18 @@ import java.util.*
 
 class Helpers {
     companion object {
-        const val URL = "http://192.168.205.219:8000/"
+        const val URL = "http://192.168.205.48:8000/"
         const val ENDPOINT_LOGIN = "api/login"
         const val ENDPOINT_LOGOUT = "api/logout"
         const val ENDPOINT_Register = "api/register"
         const val ENDPOINT_CUTI = "api/cuti"
         const val ENDPOINT_JENIS_CUTI = "api/jeniscuti"
         const val ENDPOINT_PEGAWAI = "api/pegawai"
+        const val ENDPOINT_JABATAN = "api/jabatan"
         const val ENDPOINT_PROFILE_USER = "api/profile"
         const val ENDPOINT_ATTENDANCE = "api/attendance"
         const val ENDPOINT_SHOW_IMAGE = "${URL}storage/attendance/"
-        const val ENDPOINT_SHOW_PHOTO_USER = "${URL}storage/user/"
+        const val ENDPOINT_SHOW_PHOTO_USER = "${URL}storage/users/"
     }
 }
 

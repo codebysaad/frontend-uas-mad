@@ -29,9 +29,8 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/ic_presence"
             app:layout_constraintStart_toEndOf="@+id/ic_presence"
-            app:layout_constraintTop_toTopOf="@+id/ic_presence"
-            app:layout_constraintVertical_bias="0.235"
-            tools:text="22-12-2022" />
+            app:layout_constraintTop_toBottomOf="@+id/date_presence"
+            tools:text="Masuk" />
 
         <TextView
             android:id="@+id/date_presence"
@@ -40,9 +39,8 @@
             android:layout_marginStart="8dp"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/type_presence"
             app:layout_constraintStart_toEndOf="@+id/ic_presence"
-            app:layout_constraintTop_toTopOf="@+id/ic_presence"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="22-12-2022" />
 
         <TextView

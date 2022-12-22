@@ -12,6 +12,9 @@ class CustomSettingPreferences private constructor(private val datastore: DataSt
 
     private val STATE_LOGGED = booleanPreferencesKey("is_logged")
     private val ACCESS_TOKEN = stringPreferencesKey("token")
+    private val PREF_USERNAME = stringPreferencesKey("username")
+    private val PREF_EMAIL = stringPreferencesKey("email")
+    private val PREF_IMAGE = stringPreferencesKey("image")
 
     fun getAccessToken(): Flow<String> {
         return datastore.data.map { preferences ->
@@ -25,10 +28,31 @@ class CustomSettingPreferences private constructor(private val datastore: DataSt
         }
     }
 
-    suspend fun saveAccessToken(isLogged: Boolean, token: String){
+    fun getUsername(): Flow<String> {
+        return datastore.data.map { preferences ->
+            preferences[PREF_USERNAME] ?: "No auth"
+        }
+    }
+
+    fun getEmail(): Flow<String> {
+        return datastore.data.map { preferences ->
+            preferences[PREF_EMAIL] ?: "No auth"
+        }
+    }
+
+    fun getPhoto(): Flow<String> {
+        return datastore.data.map { preferences ->
+            preferences[PREF_IMAGE] ?: "No auth"
+        }
+    }
+
+    suspend fun saveAccessToken(isLogged: Boolean, token: String, username: String, email: String, image: String){
         datastore.edit { preferences ->
             preferences[STATE_LOGGED] = isLogged
             preferences[ACCESS_TOKEN] = token
+            preferences[PREF_USERNAME] = username
+            preferences[PREF_EMAIL] = email
+            preferences[PREF_IMAGE] = image
         }
     }
 

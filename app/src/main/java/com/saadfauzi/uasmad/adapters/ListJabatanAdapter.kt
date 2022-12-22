@@ -4,18 +4,18 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.saadfauzi.uasmad.R
-import com.saadfauzi.uasmad.databinding.ItemPresenceBinding
-import com.saadfauzi.uasmad.helper.Helpers
-import com.saadfauzi.uasmad.models.ListAttendance
+import com.saadfauzi.uasmad.databinding.ItemJenisCutiBinding
+import com.saadfauzi.uasmad.models.DataJabatan
 
-class ListPresenceAdapter(private val listItem: ArrayList<ListAttendance>, val listener: OnAdapterListener) :
-    RecyclerView.Adapter<ListPresenceAdapter.ViewHolder>() {
+class ListJabatanAdapter(
+    private val listItem: ArrayList<DataJabatan>,
+    val listener: OnAdapterListener
+) :
+    RecyclerView.Adapter<ListJabatanAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ItemPresenceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemJenisCutiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -24,18 +24,17 @@ class ListPresenceAdapter(private val listItem: ArrayList<ListAttendance>, val l
         holder.bind(data, listener)
     }
 
-    class ViewHolder(var binding: ItemPresenceBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: ListAttendance, listener: OnAdapterListener) {
-            binding.datePresence.text = data.date
-            binding.timePresence.text = data.attend
-            binding.typePresence.text = data.type
-            Glide.with(itemView.context)
-                .load("${Helpers.ENDPOINT_SHOW_IMAGE}${data.photo}")
-                .centerCrop()
-                .placeholder(R.drawable.ic_place_holder)
-                .into(binding.icPresence)
-            binding.btnDeletePresence.setOnClickListener {
-                listener.onDelete(data)
+    class ViewHolder(var binding: ItemJenisCutiBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: DataJabatan, listener: OnAdapterListener) {
+            binding.apply {
+                tvTypeCuti.text = data.namaJabatan
+                tvDesc.text = data.tugas
+                btnDelete.setOnClickListener {
+                    listener.onDelete(data)
+                }
+                btnUpdate.setOnClickListener {
+                    listener.onUpdate(data)
+                }
             }
 
 //            itemView.setOnClickListener {
@@ -57,14 +56,14 @@ class ListPresenceAdapter(private val listItem: ArrayList<ListAttendance>, val l
     override fun getItemCount(): Int = listItem.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(data: ArrayList<ListAttendance>) {
+    fun setData(data: ArrayList<DataJabatan>) {
         listItem.clear()
         listItem.addAll(data)
         notifyDataSetChanged()
     }
 
     interface OnAdapterListener {
-        fun onUpdate(data: ListAttendance)
-        fun onDelete(data: ListAttendance)
+        fun onUpdate(data: DataJabatan)
+        fun onDelete(data: DataJabatan)
     }
 }

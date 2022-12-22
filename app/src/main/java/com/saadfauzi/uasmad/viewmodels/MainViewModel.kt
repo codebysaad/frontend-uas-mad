@@ -29,9 +29,21 @@ class MainViewModel (private val pref: CustomSettingPreferences): ViewModel() {
         return pref.getAccessToken().asLiveData()
     }
 
-    fun saveAccessToken(isLogged: Boolean, token: String) {
+    fun getUsername(): LiveData<String> {
+        return pref.getUsername().asLiveData()
+    }
+
+    fun getEmail(): LiveData<String> {
+        return pref.getEmail().asLiveData()
+    }
+
+    fun getPhoto(): LiveData<String> {
+        return pref.getPhoto().asLiveData()
+    }
+
+    fun saveAccessToken(isLogged: Boolean, token: String, username: String, email: String, image: String) {
         viewModelScope.launch {
-            pref.saveAccessToken(isLogged, token)
+            pref.saveAccessToken(isLogged, token, username, email, image)
         }
     }
 

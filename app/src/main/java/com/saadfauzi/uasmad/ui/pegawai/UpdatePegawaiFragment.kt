@@ -1,5 +1,6 @@
 package com.saadfauzi.uasmad.ui.pegawai
 
+import android.R
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -8,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -17,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.saadfauzi.uasmad.databinding.FragmentUpdatePegawaiBinding
 import com.saadfauzi.uasmad.helper.CustomSettingPreferences
+import com.saadfauzi.uasmad.ui.cuti.Data
 import com.saadfauzi.uasmad.viewmodels.ViewModelFactory
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -32,7 +36,9 @@ class UpdatePegawaiFragment : Fragment() {
     }
     private lateinit var viewModel: PegawaiViewModel
     private var cal: Calendar = Calendar.getInstance()
+    private lateinit var jabatan: String
     private val args: UpdatePegawaiFragmentArgs by navArgs()
+    private var kdJabatan: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +58,7 @@ class UpdatePegawaiFragment : Fragment() {
             edtAlamat.setText(args.pegawai.alamat)
             edtTmptLahir.setText(args.pegawai.tmptLahir)
             tvTglLahir.text = args.pegawai.tglLahir
+            kdJabatan = args.pegawai.idJabatan
         }
 
         viewModel = ViewModelProvider(this, ViewModelFactory(requireContext(), pref))[
@@ -68,9 +75,27 @@ class UpdatePegawaiFragment : Fragment() {
             }
         }
 
+        viewModel.getAccessToken().observe(viewLifecycleOwner) {
+            viewModel.getAllJabatan(it)
+        }
+
         viewModel.resultUpdatePegawai.observe(viewLifecycleOwner) { data ->
             if (data != null) {
                 findNavController().popBackStack()
+            }
+        }
+
+        viewModel.listJabatan.observe(viewLifecycleOwner) { jabatan ->
+            if (jabatan != null) {
+                val arraySpinner: ArrayList<Data> = ArrayList()
+                for (i in jabatan) {
+                    val data = Data(
+                        i.id,
+                        i.namaJabatan.toString()
+                    )
+                    arraySpinner.add(data)
+                }
+                setUpSpinner(arraySpinner)
             }
         }
 
@@ -104,10 +129,12 @@ class UpdatePegawaiFragment : Fragment() {
                     binding.tvTglLahir.text.toString().toRequestBody("text/plain".toMediaType())
                 val idBody = args.pegawai.id.toString().toRequestBody("text/plain".toMediaType())
                 val idParams = args.pegawai.id
+                val idJabatan = jabatan.toRequestBody("text/plain".toMediaType())
                 viewModel.getAccessToken().observe(viewLifecycleOwner) {
                     viewModel.updatePegawai(
                         it,
                         idBody,
+                        idJabatan,
                         namaLengkap,
                         alamat,
                         tmptLahir,
@@ -139,6 +166,28 @@ class UpdatePegawaiFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.apply {
             pbUpdatePegawai.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun setUpSpinner(data: ArrayList<Data>) {
+        val adapter = ArrayAdapter(requireActivity(), R.layout.simple_spinner_item, data)
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+        binding.spinnerJabatan.adapter = adapter
+        data.forEachIndexed{index, dataSpinner ->
+            if (dataSpinner.id == kdJabatan){
+                binding.spinnerJabatan.setSelection(index)
+                Log.i("IndexSpinner", "Spinner: ${dataSpinner.id}, Index: ${kdJabatan}")
+            }
+        }
+        binding.spinnerJabatan.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                jabatan = data[position].id.toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
         }
     }
 

@@ -94,6 +94,43 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_jabatan"
+        android:name="com.saadfauzi.uasmad.ui.jabatan.JabatanFragment"
+        android:label="@string/jabatan"
+        tools:layout="@layout/fragment_jabatan" >
+        <action
+            android:id="@+id/action_nav_jabatan_to_nav_add_jabatan"
+            app:destination="@id/nav_add_jabatan" />
+        <action
+            android:id="@+id/action_nav_jabatan_to_nav_update_jabatan"
+            app:destination="@id/nav_update_jabatan"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_jabatan"
+        android:name="com.saadfauzi.uasmad.ui.jabatan.AddJabatanFragment"
+        android:label="@string/jabatan"
+        tools:layout="@layout/fragment_add_jabatan" >
+        <action
+            android:id="@+id/action_nav_add_jabatan_to_nav_jabatan"
+            app:destination="@id/nav_jabatan" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_update_jabatan"
+        android:name="com.saadfauzi.uasmad.ui.jabatan.UpdateJabatanFragment"
+        android:label="@string/jabatan"
+        tools:layout="@layout/fragment_update_jabatan" >
+        <action
+            android:id="@+id/action_nav_update_jabatan_to_nav_jabatan"
+            app:destination="@id/nav_jabatan" />
+        <argument
+            android:name="Jabatan"
+            app:argType="com.saadfauzi.uasmad.models.DataJabatan" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_pegawai"
         android:name="com.saadfauzi.uasmad.ui.pegawai.PegawaiFragment"
         android:label="@string/pegawai"

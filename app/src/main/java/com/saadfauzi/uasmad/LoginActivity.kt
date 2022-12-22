@@ -152,16 +152,23 @@ class LoginActivity : AppCompatActivity() {
         viewModel.postLogin(email, password)
         viewModel.loginResult.observe(this) { result ->
             if (result != null) {
-                if (result.accessToken == null) {
-                    result.message?.let { Log.d("LoginActivity", it) }
-                    showToast(result.message.toString())
-                } else {
-                    val token = result.accessToken.toString()
-                    viewModel.saveAccessToken(true, token)
-                    Log.d("LoginActivity", token)
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
+                val token = result.accessToken.toString()
+                result.data?.name?.let { name->
+                    result.data.email?.let { email ->
+                        result.data.photo?.let { photo ->
+                            viewModel.saveAccessToken(
+                                true,
+                                token,
+                                name,
+                                email,
+                                photo,
+                            )
+                        }
+                    }
                 }
+                Log.d("LoginActivity", token)
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
             } else {
                 showToast(resources.getString(R.string.failed_login))
             }

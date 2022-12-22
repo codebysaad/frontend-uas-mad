@@ -34,9 +34,9 @@ class RegisterLoginViewModel (private val pref: CustomSettingPreferences) : View
         return pref.getLoginState().asLiveData()
     }
 
-    fun saveAccessToken(isLogged: Boolean, token: String) {
+    fun saveAccessToken(isLogged: Boolean, token: String, username: String, email: String, image: String) {
         viewModelScope.launch {
-            pref.saveAccessToken(isLogged, token)
+            pref.saveAccessToken(isLogged, token, username, email, image)
         }
     }
 

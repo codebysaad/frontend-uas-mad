@@ -1,4 +1,4 @@
-package com.saadfauzi.uasmad.ui.pegawai
+package com.saadfauzi.uasmad.ui.jabatan
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -17,20 +17,21 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saadfauzi.uasmad.R
-import com.saadfauzi.uasmad.adapters.ListPegawaiAdapter
-import com.saadfauzi.uasmad.databinding.FragmentPegawaiBinding
+import com.saadfauzi.uasmad.adapters.ListJabatanAdapter
+import com.saadfauzi.uasmad.adapters.ListJenisCutiAdapter
+import com.saadfauzi.uasmad.databinding.FragmentJabatanBinding
 import com.saadfauzi.uasmad.helper.CustomSettingPreferences
-import com.saadfauzi.uasmad.models.DataPegawai
+import com.saadfauzi.uasmad.models.DataJabatan
 import com.saadfauzi.uasmad.viewmodels.ViewModelFactory
 
 private val Activity.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-class PegawaiFragment : Fragment() {
+class JabatanFragment : Fragment() {
 
     private val binding by lazy {
-        FragmentPegawaiBinding.inflate(layoutInflater)
+        FragmentJabatanBinding.inflate(layoutInflater)
     }
-    private lateinit var viewModel: PegawaiViewModel
+    private lateinit var viewModel: JabatanViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +46,7 @@ class PegawaiFragment : Fragment() {
 
         val pref = CustomSettingPreferences.getInstance(requireActivity().dataStore)
         viewModel = ViewModelProvider(this, ViewModelFactory(requireContext(), pref))[
-                PegawaiViewModel::class.java
+                JabatanViewModel::class.java
         ]
 
         viewModel.isLoading.observe(viewLifecycleOwner) {
@@ -59,11 +60,11 @@ class PegawaiFragment : Fragment() {
         }
 
         viewModel.getAccessToken().observe(viewLifecycleOwner) {
-            viewModel.getAllPegawai(it)
+            viewModel.getAllJabatan(it)
             Log.d("TokenJenisCuti", it)
         }
 
-        viewModel.listPegawai.observe(viewLifecycleOwner) {
+        viewModel.listJabatan.observe(viewLifecycleOwner) {
             if (it != null) {
                 setupRecyclerView(it)
             }
@@ -75,25 +76,25 @@ class PegawaiFragment : Fragment() {
             }
         }
 
-        binding.fabPegawai.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_pegawai_to_nav_add_pegawai)
+        binding.fabJabatan.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_jabatan_to_nav_add_jabatan)
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun setupRecyclerView(listData: ArrayList<DataPegawai>) {
-        binding.rvListPegawai.layoutManager = LinearLayoutManager(requireActivity())
-        val adapter = ListPegawaiAdapter(listData, object : ListPegawaiAdapter.OnAdapterListener{
-            override fun onDelete(data: DataPegawai) {
+    private fun setupRecyclerView(listData: ArrayList<DataJabatan>) {
+        binding.rvListJabatan.layoutManager = LinearLayoutManager(requireActivity())
+        val adapter = ListJabatanAdapter(listData, object : ListJabatanAdapter.OnAdapterListener{
+            override fun onDelete(data: DataJabatan) {
                 deleteDialog(data)
             }
 
-            override fun onUpdate(data: DataPegawai) {
-                val action = PegawaiFragmentDirections.actionNavPegawaiToNavUpdatePegawai(data)
+            override fun onUpdate(data: DataJabatan) {
+                val action = JabatanFragmentDirections.actionNavJabatanToNavUpdateJabatan(data)
                 findNavController().navigate(action)
             }
         })
-        binding.rvListPegawai.adapter = adapter
+        binding.rvListJabatan.adapter = adapter
         adapter.notifyDataSetChanged()
     }
 
@@ -103,22 +104,23 @@ class PegawaiFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.apply {
-            pbListPegawai.visibility = if (isLoading) View.VISIBLE else View.GONE
+            pbListJabatan.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 
-    private fun deleteDialog(data: DataPegawai) {
+    private fun deleteDialog(data: DataJabatan) {
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(resources.getString(R.string.app_name))
         builder.setMessage(resources.getString(R.string.dialog_delete))
         builder.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
             viewModel.getAccessToken().observe(viewLifecycleOwner) {
-                viewModel.deletePegawai(it, data)
-                viewModel.getAllPegawai(it)
+                viewModel.deleteJenisCuti(it, data)
+                viewModel.getAllJabatan(it)
                 Log.d("TokenJenisCuti", it)
             }
         }
         builder.setNegativeButton(resources.getString(R.string.no)) { dialogInterface, _ -> dialogInterface.cancel() }
         builder.show()
     }
+
 }

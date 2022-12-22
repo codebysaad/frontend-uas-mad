@@ -19,6 +19,9 @@ data class PegawaiResponse(
 @Parcelize
 data class DataPegawai(
 
+	@field:SerializedName("tugas")
+	val tugas: String? = null,
+
 	@field:SerializedName("role")
 	val role: String? = null,
 
@@ -42,6 +45,12 @@ data class DataPegawai(
 
 	@field:SerializedName("email")
 	val email: String? = null,
+
+	@field:SerializedName("id_jabatan")
+	val idJabatan: Int,
+
+	@field:SerializedName("nama_jabatan")
+	val namaJabatan: String? = null,
 
 	@field:SerializedName("alamat")
 	val alamat: String? = null

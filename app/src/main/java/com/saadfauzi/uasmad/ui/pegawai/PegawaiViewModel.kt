@@ -35,6 +35,9 @@ class PegawaiViewModel (private val pref: CustomSettingPreferences) : ViewModel(
     private val _deleteResult = MutableLiveData<UpdateDeletePegawai?>()
     val deleteResult: LiveData<UpdateDeletePegawai?> = _deleteResult
 
+    private val _listJabatan = MutableLiveData<ArrayList<DataJabatan>?>()
+    val listJabatan: LiveData<ArrayList<DataJabatan>?> = _listJabatan
+
     fun getAccessToken(): LiveData<String> {
         return pref.getAccessToken().asLiveData()
     }
@@ -69,11 +72,12 @@ class PegawaiViewModel (private val pref: CustomSettingPreferences) : ViewModel(
         })
     }
 
-    fun addPegawai(token: String, namaLengkap: RequestBody, alamat: RequestBody, tmptLahir: RequestBody, tglLahir: RequestBody){
+    fun addPegawai(token: String, idJabatan: RequestBody, namaLengkap: RequestBody, alamat: RequestBody, tmptLahir: RequestBody, tglLahir: RequestBody){
         _isLoading.value = true
         Log.i("TokenJenisCuti", token)
         val client = ApiConfig.getApiService().addPegawai(
             "Bearer $token",
+            idJabatan,
             namaLengkap,
             alamat,
             tmptLahir,
@@ -101,7 +105,7 @@ class PegawaiViewModel (private val pref: CustomSettingPreferences) : ViewModel(
         })
     }
 
-    fun updatePegawai(token: String, idBody: RequestBody, namaLengkap: RequestBody, alamat: RequestBody, tmptLahir: RequestBody, tglLahir: RequestBody, idParams: Int){
+    fun updatePegawai(token: String, idBody: RequestBody, idJabatan: RequestBody, namaLengkap: RequestBody, alamat: RequestBody, tmptLahir: RequestBody, tglLahir: RequestBody, idParams: Int){
         _isLoading.value = true
         val methode = "PUT".toRequestBody()
         Log.i("TokenJenisCuti", token)
@@ -109,6 +113,7 @@ class PegawaiViewModel (private val pref: CustomSettingPreferences) : ViewModel(
             "Bearer $token",
             methode,
             idBody,
+            idJabatan,
             namaLengkap,
             alamat,
             tmptLahir,
@@ -137,7 +142,7 @@ class PegawaiViewModel (private val pref: CustomSettingPreferences) : ViewModel(
         })
     }
 
-    fun deleteJenisCuti(token: String, data: DataPegawai){
+    fun deletePegawai(token: String, data: DataPegawai){
         _isLoading.value = true
         val idBody = data.id.toString().toRequestBody()
         val idParams = data.id
@@ -165,6 +170,36 @@ class PegawaiViewModel (private val pref: CustomSettingPreferences) : ViewModel(
             }
 
             override fun onFailure(call: Call<UpdateDeletePegawai>, t: Throwable) {
+                _isLoading.value = false
+                _isMessage.value = Event(t.message)
+            }
+
+        })
+    }
+
+    fun getAllJabatan(token: String){
+        _isLoading.value = true
+        Log.i("TokenJenisCuti", token)
+        val client = ApiConfig.getApiService().getAllJabatan(
+            "Bearer $token",
+        )
+        client.enqueue(object : Callback<JabatanResponse> {
+            override fun onResponse(
+                call: Call<JabatanResponse>,
+                response: Response<JabatanResponse>
+            ) {
+                if (response.isSuccessful) {
+                    _isLoading.value = false
+                    val responseBody = response.body()
+                    if (responseBody != null && responseBody.success) {
+                        _listJabatan.value = responseBody.data
+                    }
+                } else {
+                    _isLoading.value = false
+                }
+            }
+
+            override fun onFailure(call: Call<JabatanResponse>, t: Throwable) {
                 _isLoading.value = false
                 _isMessage.value = Event(t.message)
             }

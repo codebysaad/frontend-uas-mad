@@ -102,16 +102,17 @@ class RegisterActivity : AppCompatActivity() {
 
         viewModel.registerResult.observe(this) { result ->
             if (result != null) {
-                if (result.accessToken == null) {
-                    result.tokenType?.let { Log.d("RegisterActivity", it) }
-                    Toast.makeText(this, result.tokenType, Toast.LENGTH_SHORT).show()
-                } else {
-                    val token = result.accessToken.toString()
-                    viewModel.saveAccessToken(true, token)
-                    Log.d("RegisterActivity", token)
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                }
+                val token = result.accessToken
+                viewModel.saveAccessToken(
+                    true,
+                    token,
+                    result.data.name,
+                    result.data.email,
+                    result.data.photo,
+                )
+                Log.d("RegisterActivity", token)
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
             } else {
                 Toast.makeText(this, resources.getString(R.string.failed_login), Toast.LENGTH_SHORT)
                     .show()

@@ -123,6 +123,39 @@ interface ApiServices {
         @Path("id") idParams: Int,
     ): Call<UpdateDeleteCuti>
 
+    @GET(Helpers.ENDPOINT_JABATAN)
+    fun getAllJabatan(
+        @Header("Authorization") token: String,
+    ): Call<JabatanResponse>
+
+    @Multipart
+    @POST(Helpers.ENDPOINT_JABATAN)
+    fun addJabatan(
+        @Header("Authorization") token: String,
+        @Part("nama_jabatan") namaJabatan: RequestBody,
+        @Part("tugas") tugas: RequestBody,
+    ): Call<DataJabatan>
+
+    @Multipart
+    @POST("${Helpers.ENDPOINT_JABATAN}/{id}")
+    fun updateJabatan(
+        @Header("Authorization") token: String,
+        @Part("_method") methode: RequestBody,
+        @Part("id") idBody: RequestBody,
+        @Part("nama_jabatan") namaJabatan: RequestBody,
+        @Part("tugas") tugas: RequestBody,
+        @Path("id") idParams: Int,
+    ): Call<DataJabatan>
+
+    @Multipart
+    @POST("${Helpers.ENDPOINT_JABATAN}/{id}")
+    fun deleteJabatan(
+        @Header("Authorization") token: String,
+        @Part("_method") methode: RequestBody,
+        @Part("id") id: RequestBody,
+        @Path("id") idParams: Int,
+    ): Call<JabatanResponse>
+
     @GET(Helpers.ENDPOINT_PEGAWAI)
     fun getAllPegawai(
         @Header("Authorization") token: String,
@@ -132,6 +165,7 @@ interface ApiServices {
     @POST(Helpers.ENDPOINT_PEGAWAI)
     fun addPegawai(
         @Header("Authorization") token: String,
+        @Part("id_jabatan") idJabatan: RequestBody,
         @Part("nama_lengkap") namaLengkap: RequestBody,
         @Part("alamat") alamat: RequestBody,
         @Part("tmpt_lahir") tmptLahir: RequestBody,
@@ -144,6 +178,7 @@ interface ApiServices {
         @Header("Authorization") token: String,
         @Part("_method") methode: RequestBody,
         @Part("id") idBody: RequestBody,
+        @Part("id_jabatan") idJabatan: RequestBody,
         @Part("nama_lengkap") namaLengkap: RequestBody,
         @Part("alamat") alamat: RequestBody,
         @Part("tmpt_lahir") tmptLahir: RequestBody,

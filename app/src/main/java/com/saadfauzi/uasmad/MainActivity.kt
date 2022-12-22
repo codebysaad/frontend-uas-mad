@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
@@ -25,10 +27,13 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.saadfauzi.uasmad.databinding.ActivityMainBinding
 import com.saadfauzi.uasmad.helper.CustomSettingPreferences
+import com.saadfauzi.uasmad.helper.Helpers
 import com.saadfauzi.uasmad.viewmodels.MainViewModel
 import com.saadfauzi.uasmad.viewmodels.ViewModelFactory
+import de.hdodenhof.circleimageview.CircleImageView
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -40,6 +45,9 @@ class MainActivity : AppCompatActivity() {
     }
     private lateinit var viewModel: MainViewModel
     private lateinit var token: String
+    private lateinit var tvUsername: TextView
+    private lateinit var tvEmail: TextView
+    private lateinit var image: CircleImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +67,15 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_presence, R.id.nav_list_presence, R.id.nav_cuti, R.id.nav_jns_cuti, R.id.nav_pegawai
+                R.id.nav_presence, R.id.nav_list_presence, R.id.nav_cuti, R.id.nav_jns_cuti, R.id.nav_jabatan, R.id.nav_pegawai
             ), drawerLayout
         )
+
+        val headerView = navView.getHeaderView(0)
+        tvUsername = headerView.findViewById(R.id.tv_username)
+        tvEmail = headerView.findViewById(R.id.tv_email_user)
+        image = headerView.findViewById(R.id.ic_photo_user)
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         if (!allPermissionsGranted()){
@@ -88,6 +102,23 @@ class MainActivity : AppCompatActivity() {
             it.getContentIfNotHandled()?.let { message ->
                 showToast(message)
             }
+        }
+
+        viewModel.getUsername().observe(this) {
+            tvUsername.text = it
+        }
+
+        viewModel.getEmail().observe(this) {
+            tvEmail.text = it
+        }
+
+        viewModel.getPhoto().observe(this) {
+            Glide.with(this)
+                .load("${Helpers.ENDPOINT_SHOW_PHOTO_USER}${it}")
+                .centerCrop()
+                .override(220,220)
+                .placeholder(R.drawable.ic_place_holder)
+                .into(image)
         }
     }
 
@@ -132,7 +163,7 @@ class MainActivity : AppCompatActivity() {
         builder.setMessage(resources.getString(R.string.dialog_logout))
         builder.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
             viewModel.logout(token)
-            viewModel.saveAccessToken(false, "No Auth")
+            viewModel.saveAccessToken(false, "No Auth", "Null", "Null", "Null")
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
